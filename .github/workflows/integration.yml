@@ -1,0 +1,27 @@
+name: NestJS CI
+run-name: ${{github.actor}} is learning GitHub actions
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [18.x]
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'npm' # Cache node-modules
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run Unit Test
+        run: npm run test
