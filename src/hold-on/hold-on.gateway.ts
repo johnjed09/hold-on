@@ -8,8 +8,9 @@ import { Server } from 'socket.io';
 import { HoldOnService } from './hold-on.service';
 
 @WebSocketGateway({
-  origin: 'http://localhost:3000',
+  origin: ['http://localhost:3000', 'http://127.0.0.1:3000'],
   methods: ['GET', 'POST'],
+  credentials: true,
 })
 export class HoldOnGateway implements OnGatewayInit {
   @WebSocketServer()
