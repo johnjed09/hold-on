@@ -61,4 +61,22 @@ describe('Hold On Service', () => {
     // If the guard failed, it would be 20 (5 starts * 4 ticks)
     expect(tickSpy).toHaveBeenCalledTimes(4);
   });
+
+  it('should reset time after stop()', () => {
+    jest.useFakeTimers();
+    const resetSpy = jest.spyOn(service as any, 'resetTimer');
+
+    service.start();
+
+    // Advance 4 seconds (service.start() starts at 1. Adding 3 seconds for 4 total)
+    jest.advanceTimersByTime(3000);
+
+    service.stop();
+
+    expect(resetSpy).toHaveBeenCalled();
+
+    service.time$.subscribe((time) => {
+      expect(time).toBe(0);
+    });
+  });
 });

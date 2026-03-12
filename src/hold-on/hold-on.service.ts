@@ -27,11 +27,17 @@ export class HoldOnService implements OnModuleDestroy {
     this.timer = setTimeout(() => this.tick(), this.oneSecond);
   }
 
+  private resetTimer() {
+    this.intervalCount = 0;
+    this.timeSource.next(this.intervalCount);
+  }
+
   stop() {
     if (this.timer) {
       clearTimeout(this.timer);
       this.timer = null;
       this.timerStopSource.next(true);
+      this.resetTimer();
     }
   }
 

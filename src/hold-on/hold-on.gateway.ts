@@ -20,7 +20,10 @@ export class HoldOnGateway implements OnGatewayInit {
 
   afterInit() {
     this.holdOnService.time$.subscribe((currentTime) => {
-      this.server.emit('timer', currentTime);
+      if (currentTime > 0) {
+        // Only emit if time is greater than 0
+        this.server.emit('timer', currentTime);
+      }
     });
 
     this.holdOnService.timerStop$.subscribe((isStop) => {
