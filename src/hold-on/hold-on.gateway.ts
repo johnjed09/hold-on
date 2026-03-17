@@ -10,7 +10,7 @@ import { HoldOnService } from './hold-on.service';
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001'],
+    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://fe-hold-on.onrender.com'],
   },
 })
 export class HoldOnGateway implements OnGatewayInit {
