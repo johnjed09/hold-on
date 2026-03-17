@@ -1,10 +1,11 @@
 import {
+  ConnectedSocket,
   OnGatewayInit,
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
 } from '@nestjs/websockets';
-import { Server } from 'socket.io';
+import { Server, Socket } from 'socket.io';
 import { HoldOnService } from './hold-on.service';
 
 @WebSocketGateway({
@@ -21,7 +22,6 @@ export class HoldOnGateway implements OnGatewayInit {
   afterInit() {
     this.holdOnService.time$.subscribe((currentTime) => {
       if (currentTime > 0) {
-        // Only emit if time is greater than 0
         this.server.emit('timer', currentTime);
       }
     });
@@ -29,6 +29,12 @@ export class HoldOnGateway implements OnGatewayInit {
     this.holdOnService.timerStop$.subscribe((isStop) => {
       if (isStop) {
         this.server.emit('stop', 'Timer stopped!');
+      }
+    });
+
+    this.holdOnService.holdList$.subscribe((holdList) => {
+      if (holdList.length == 0) {
+        this.holdOnService.stop();
       }
     });
   }
@@ -41,5 +47,17 @@ export class HoldOnGateway implements OnGatewayInit {
   @SubscribeMessage('stop')
   handleStop() {
     this.holdOnService.stop();
+  }
+
+  // TODO: Unit testing
+  @SubscribeMessage('someone_hold')
+  handleSomeoneHold(@ConnectedSocket() client: Socket) {
+    this.holdOnService.someoneHold(client.id);
+  }
+
+  // TODO: Unit testing
+  @SubscribeMessage('someone_release')
+  handleSomeoneRelease(@ConnectedSocket() client: Socket) {
+    this.holdOnService.someoneRelease(client.id);
   }
 }

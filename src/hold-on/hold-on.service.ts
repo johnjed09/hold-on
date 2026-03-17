@@ -12,6 +12,8 @@ export class HoldOnService implements OnModuleDestroy {
   public time$ = this.timeSource.asObservable();
   private timerStopSource = new BehaviorSubject<boolean>(false);
   public timerStop$ = this.timerStopSource.asObservable();
+  private holdListSource = new BehaviorSubject<string[]>([]);
+  public holdList$ = this.holdListSource.asObservable();
 
   start() {
     if (this.timer) return; // Prevent multiple timers
@@ -22,7 +24,7 @@ export class HoldOnService implements OnModuleDestroy {
     this.intervalCount++;
     this.timeSource.next(this.intervalCount); // Broadcast to listeners
 
-    console.log('1 second passed.', this.intervalCount);
+    console.log(`${this.intervalCount} seconds passed.`);
 
     this.timer = setTimeout(() => this.tick(), this.oneSecond);
   }
@@ -39,6 +41,18 @@ export class HoldOnService implements OnModuleDestroy {
       this.timerStopSource.next(true);
       this.resetTimer();
     }
+  }
+
+  someoneHold(clientId: string) {
+    const currentList = this.holdListSource.getValue();
+    if (!currentList.includes(clientId)) {
+      this.holdListSource.next([...this.holdListSource.getValue(), clientId]);
+    }
+  }
+
+  someoneRelease(clientId: string) {
+    const currentList = this.holdListSource.getValue();
+    this.holdListSource.next(currentList.filter((id) => id !== clientId));
   }
 
   onModuleDestroy() {
