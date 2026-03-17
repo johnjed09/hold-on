@@ -9,6 +9,7 @@ describe('HoldOnGateway', () => {
 
   const timeSubject = new Subject<number>();
   const stopSubject = new Subject<boolean>();
+  const holdListSubject = new Subject<string[]>();
 
   const mockServer = {
     emit: jest.fn(),
@@ -18,6 +19,9 @@ describe('HoldOnGateway', () => {
     useValue: {
       time$: timeSubject.asObservable(),
       timerStop$: stopSubject.asObservable(),
+      holdList$: holdListSubject.asObservable(),
+      someoneHold: jest.fn(),
+      someoneRelease: jest.fn(),
       start: jest.fn(),
       stop: jest.fn(),
     },
