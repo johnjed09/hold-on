@@ -33,6 +33,7 @@ export class HoldOnGateway implements OnGatewayInit {
     });
 
     this.holdOnService.holdList$.subscribe((holdList) => {
+      this.server.emit('holdList', holdList);
       if (holdList.length == 0) {
         this.holdOnService.stop();
       }
