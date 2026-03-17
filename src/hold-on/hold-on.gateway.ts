@@ -28,7 +28,7 @@ export class HoldOnGateway implements OnGatewayInit {
 
     this.holdOnService.timerStop$.subscribe((isStop) => {
       if (isStop) {
-        this.server.emit('stop', 'Timer stopped!');
+        this.server.emit('stop', isStop);
       }
     });
 
