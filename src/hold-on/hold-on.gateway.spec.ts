@@ -59,18 +59,15 @@ describe('HoldOnGateway', () => {
       expect(mockServer.emit).toHaveBeenCalledWith('timer', testTime);
     });
 
-    it('should emit "stop" when the service timerStop$ emits true', () => {
+    it('should emit "stop" when the service timerStop$ is true', () => {
       stopSubject.next(true);
 
       expect(mockServer.emit).toHaveBeenCalledWith('stop', true);
     });
 
-    it('should NOT emit "stop" when timerStop$ is false', () => {
+    it('should emit "stop" when the service timerStop$ is false', () => {
       stopSubject.next(false);
-      expect(mockServer.emit).not.toHaveBeenCalledWith(
-        'stop',
-        false,
-      );
+      expect(mockServer.emit).toHaveBeenCalledWith('stop', false);
     });
   });
 

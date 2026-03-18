@@ -18,6 +18,7 @@ export class HoldOnService implements OnModuleDestroy {
   start() {
     if (this.timer) return; // Prevent multiple timers
     this.tick();
+    this.timerStopSource.next(false);
   }
 
   private tick() {

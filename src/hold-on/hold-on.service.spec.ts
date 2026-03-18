@@ -28,6 +28,11 @@ describe('Hold On Service', () => {
 
   it('should stop the timer when stop() is called.', () => {
     service.start();
+
+    // Advance 1 seconds
+    jest.useFakeTimers();
+    jest.advanceTimersByTime(1000);
+
     service.stop();
     service.timerStop$.subscribe((isTimerStop) => {
       expect(isTimerStop).toBe(true);

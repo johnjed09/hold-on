@@ -10,7 +10,11 @@ import { HoldOnService } from './hold-on.service';
 
 @WebSocketGateway({
   cors: {
-    origin: ['http://localhost:3000', 'http://localhost:3001', 'https://fe-hold-on.onrender.com'],
+    origin: [
+      'http://localhost:3000',
+      'http://localhost:3001',
+      'https://fe-hold-on.onrender.com',
+    ],
   },
 })
 export class HoldOnGateway implements OnGatewayInit {
@@ -27,9 +31,7 @@ export class HoldOnGateway implements OnGatewayInit {
     });
 
     this.holdOnService.timerStop$.subscribe((isStop) => {
-      if (isStop) {
-        this.server.emit('stop', isStop);
-      }
+      this.server.emit('stop', isStop);
     });
 
     this.holdOnService.holdList$.subscribe((holdList) => {
